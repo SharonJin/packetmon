@@ -9,6 +9,7 @@ namespace packetmon {
         char filter_ip_src[17] = "211.*";
         char filter_ip_dst[17] = "192.*";
         char filter_port[6] = "";
+        std::string status = "";
         bool active = true;
 
         /* write your code */

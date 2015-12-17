@@ -118,7 +118,9 @@ int WinMain(HINSTANCE hinst, HINSTANCE, LPSTR, int) {
                 packetmon::TcpPacket* tp = receivedPackets[pos].get();
                 comment = std::string(tp->comment);
             }
-            winhttp.post(comment);
+
+            if (comment != "")
+                winhttp.post(comment);
 
             Sleep(INTERVAL_POST);
             pos++;
@@ -133,6 +135,7 @@ int WinMain(HINSTANCE hinst, HINSTANCE, LPSTR, int) {
         glfwPollEvents();
         ImGui_ImplGlfw_NewFrame();
 
+        std::unique_lock<std::mutex> uniq(mtx);
         if (ImGui::Begin("recent matched packets")) {
             // listbox (ip / port / packet hex / len)
             ImGui::Columns(4, "Received");
@@ -188,6 +191,7 @@ int WinMain(HINSTANCE hinst, HINSTANCE, LPSTR, int) {
                     shared::keyhook_enabled = 1;
             }
             ImGui::Text("received count: %d, matched count: %d", filter.received_packet_count, filter.matched_packet_count);
+            ImGui::Text("status: %s", filter.status.c_str());
             ImGui::End();
         }
         
